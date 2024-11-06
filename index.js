@@ -7,7 +7,7 @@ function jogoAdivinhacao(){
     const resposta = document.querySelector('#res')
     
     function iniciarJogo() {
-        numeroSecreto = Math.floor(Math.random() * 1) + 1
+        numeroSecreto = Math.floor(Math.random() * 100) + 1
         tentativas = 0
         resposta.innerHTML = ''
         if(document.querySelector('#inputNumber')) {
