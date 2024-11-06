@@ -1,12 +1,29 @@
 function jogoAdivinhacao(){
-    const numeroSecreto = Math.floor(Math.random() * 100) + 1
+    let numeroSecreto;
     let tentativas = 0
-    // console.log('Bem vindo ao jogo de adivinhação')
-    // console.log('Tente adivinhar um número de 1 a 100')
     const audio = document.querySelector('#meuAudio')
     const botaoInicio = document.querySelector('#iniciarJogo')
     const container = document.querySelector('.container')
     const resposta = document.querySelector('#res')
+    
+    function iniciarJogo() {
+        numeroSecreto = Math.floor(Math.random() * 1) + 1
+        tentativas = 0
+        resposta.innerHTML = ''
+        if(document.querySelector('#inputNumber')) {
+            document.querySelector('#inputNumber').remove()
+        }
+
+        if(document.querySelector('#botaoEnviar')) {
+            document.querySelector('#botaoEnviar').remove()
+        }
+
+        if(document.querySelector('#btn_jogarNovamente')) {
+            document.querySelector('#btn_jogarNovamente').remove()
+        }
+        fazerPalpite()
+
+    }
 
     function fazerPalpite() {
         if(document.querySelector('#inputNumber')) {
@@ -54,7 +71,18 @@ function jogoAdivinhacao(){
             }else {
                 atualizarResposta(`✔ Parabéns, você acertou o número ${numeroSecreto} em ${tentativas} tentativas!`, 'green')
                 audio.play()
+                
+                const jogarNovamente = document.createElement('button')
+                jogarNovamente.id = 'btn_jogarNovamente'
+                jogarNovamente.textContent = 'Jogar Novamente'
+                container.appendChild(jogarNovamente)
+                jogarNovamente.addEventListener('click', ()=>{
+                    audio.pause()
+                    audio.currentTime = 0
+                    iniciarJogo()
+                })
             }
+
 
         })
 
