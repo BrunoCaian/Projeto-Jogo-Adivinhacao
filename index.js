@@ -1,6 +1,7 @@
 function jogoAdivinhacao(){
     let numeroSecreto;
     let tentativas = 0
+    let jogoConcluido = false
     const audio = document.querySelector('#meuAudio')
     const botaoInicio = document.querySelector('#iniciarJogo')
     const container = document.querySelector('.container')
@@ -9,6 +10,7 @@ function jogoAdivinhacao(){
     function iniciarJogo() {
         numeroSecreto = Math.floor(Math.random() * 100) + 1
         tentativas = 0
+        jogoConcluido = false
         resposta.innerHTML = ''
         if(document.querySelector('#inputNumber')) {
             document.querySelector('#inputNumber').remove()
@@ -48,6 +50,7 @@ function jogoAdivinhacao(){
         }
         
         envio.addEventListener('click', ()=>{
+            if(jogoConcluido) return
             envio.classList.add('clicked')
             const palpite = parseInt(inputPalpite.value)
             tentativas++
@@ -71,19 +74,20 @@ function jogoAdivinhacao(){
             }else {
                 atualizarResposta(`✔ Parabéns, você acertou o número ${numeroSecreto} em ${tentativas} tentativas!`, 'green')
                 audio.play()
-                
-                const jogarNovamente = document.createElement('button')
-                jogarNovamente.id = 'btn_jogarNovamente'
-                jogarNovamente.textContent = 'Jogar Novamente'
-                container.appendChild(jogarNovamente)
-                jogarNovamente.addEventListener('click', ()=>{
-                    audio.pause()
-                    audio.currentTime = 0
-                    iniciarJogo()
-                })
+                jogoConcluido = true
+
+                if(!document.querySelector('#btn_jogarNovamente')) {
+                    const jogarNovamente = document.createElement('button')
+                    jogarNovamente.id = 'btn_jogarNovamente'
+                    jogarNovamente.textContent = 'Jogar Novamente'
+                    container.appendChild(jogarNovamente)
+                    jogarNovamente.addEventListener('click', ()=>{
+                        audio.pause()
+                        audio.currentTime = 0
+                        iniciarJogo()
+                    })
+                }
             }
-
-
         })
 
         inputPalpite.addEventListener('input', ()=>{
@@ -91,6 +95,6 @@ function jogoAdivinhacao(){
         })
     }
 
-    botaoInicio.addEventListener('click', fazerPalpite)
+    botaoInicio.addEventListener('click', iniciarJogo)
 }
 jogoAdivinhacao()
